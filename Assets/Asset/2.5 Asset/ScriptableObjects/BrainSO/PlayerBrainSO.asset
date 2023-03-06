@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5d4bcd4a39fe19478b5ef43cacaf216, type: 3}
+  m_Name: PlayerBrainSO
+  m_EditorClassIdentifier: 
+  GetBrainStates:
+  - eBrainState: 0
+    TimeToLive: 0
+    SelfTerminated: 0
+    stateAfterSelfTerminated: 0
+    NeigborStates:
+    - eBrainState: 1
+      requiredIntentes:
+      - eActionIntentKey: 1
+        Priority: 1
+        SetTrue: 1
+    - eBrainState: 2
+      requiredIntentes:
+      - eActionIntentKey: 2
+        Priority: 2
+        SetTrue: 1
+  - eBrainState: 1
+    TimeToLive: 0
+    SelfTerminated: 0
+    stateAfterSelfTerminated: 0
+    NeigborStates:
+    - eBrainState: 0
+      requiredIntentes:
+      - eActionIntentKey: 1
+        Priority: 1
+        SetTrue: 0
+    - eBrainState: 2
+      requiredIntentes:
+      - eActionIntentKey: 2
+        Priority: 2
+        SetTrue: 1
+  - eBrainState: 2
+    TimeToLive: 0.2
+    SelfTerminated: 1
+    stateAfterSelfTerminated: 0
+    NeigborStates: []

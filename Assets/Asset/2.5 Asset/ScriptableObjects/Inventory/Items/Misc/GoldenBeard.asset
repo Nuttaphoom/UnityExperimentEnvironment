@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4897e08e6b94e074fb3a869849746da9, type: 3}
+  m_Name: GoldenBeard
+  m_EditorClassIdentifier: 
+  _itemName: Golden Beard
+  _itemDescription: Use to look C O O L
+  _previewImage: {fileID: -4619988530279709204, guid: 70e0bec88cbfd724bbc7ffec0c9b3333, type: 3}
+  _itemType: {fileID: 11400000, guid: 5b433163c8b290e4aab835a1d5059f47, type: 2}
