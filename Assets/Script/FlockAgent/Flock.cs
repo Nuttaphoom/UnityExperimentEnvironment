@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 
-public class Flock : MonoBehaviour
+public class Flocks : MonoBehaviour
 {
     public FlockAgent agentPrefab;
     public FlockBehavior behavior;

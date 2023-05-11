@@ -6,6 +6,8 @@ TagManager:
   tags:
   - PlayerCharacter
   - Pickable
+  - hide
+  - Treasure
   layers:
   - Default
   - TransparentFX
