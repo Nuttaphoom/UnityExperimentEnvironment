@@ -6,7 +6,7 @@ using UnityEngine;
 public class Flock : MonoBehaviour
 {
     public FlockManager myManager;
-    public Transform _homeTarget; 
+    public Transform _Target; 
     float speed;
 
     float time; 
@@ -20,8 +20,11 @@ public class Flock : MonoBehaviour
 
     public void Init(Transform homeTarget , int type)
     {
-        _homeTarget = homeTarget;
-        behaviorType = type; 
+        _Target = homeTarget;
+        behaviorType = type;
+
+        if (behaviorType == 2) 
+            transform.Rotate(Vector3.up, Random.Range(-180.0f, 180.0f)); 
     }
 
     // Update is called once per frame
@@ -30,7 +33,9 @@ public class Flock : MonoBehaviour
         if (behaviorType == 1)
             ApplyFlockingRulesNO2();
         else if (behaviorType == 2)
-            ApplyFlockingRulesNO3(); 
+            ApplyFlockingRulesNO3();
+        else if (behaviorType == 3)
+            ApplyFlockingRulesNO4(); 
         
         transform.Translate(0, 0, Time.deltaTime * speed);
     }
@@ -101,7 +106,7 @@ public class Flock : MonoBehaviour
         // check our neighbors within neighborDistance
         GameObject[] all = myManager.allFish;
 
-        Vector3 nbCenter = Vector3.zero;     // Rule #1
+        Vector3 nbCenter = Vector3.zero ;     // Rule #1
         float nbSpeed = 0.0f;                // Rule #2
         Vector3 nbAvoid = Vector3.zero;      // Rule #3
         int nbSize = 0;
@@ -112,7 +117,7 @@ public class Flock : MonoBehaviour
             {
                 // calculate the distance & check if it is our neighbor.
                 float nDistance = Vector3.Distance(fish.transform.position, this.transform.position);
-                if (nDistance <= myManager.neighborDistance)
+                if (nDistance <= myManager.neighborDistance / 2)
                 {
                     // collect data for each rules in group behavior
                     // Rule#1 : grouping toward the center
@@ -133,23 +138,10 @@ public class Flock : MonoBehaviour
             }
         }
 
-        //Moving away from the obstacle 
-        //Debug.DrawRay(transform.position, transform.forward , Color.yellow);
-
-        //RaycastHit hit;
-        //if (Physics.Raycast(transform.position, transform.forward, out hit, 3 ))
-        //{
-        //    Debug.DrawLine(transform.position, hit.point,Color.red);
-        //    transform.rotation = Quaternion.Slerp(this.transform.rotation,
-        //                               Quaternion.LookRotation(Vector3.Reflect(transform.forward, hit.normal)),
-        //                               myManager.rotationSpeed * Time.deltaTime);
-        //}
-
         // if we have neighbors, then we calculate all 3 rules:
         // 1. average of center
         // 2. average of speed [average of heading direction]
         // 3. if too close to any neighbor, move away from the neighbor.
-        // 4. if too close too obstacle, move away from the obstacle
         // Then, calculate the right direction for group behavior.
         if (nbSize > 0)
         {
@@ -160,11 +152,11 @@ public class Flock : MonoBehaviour
             // do average
             nbCenter = nbCenter / nbSize;
             //coming closer to FlockManager
-            nbCenter = (nbCenter + _homeTarget.position) / 2; 
+            nbCenter = (nbCenter + _Target.transform.position) / 2    ; 
 
             // computer target direction
-            Vector3 targetDir = (nbCenter + nbAvoid) - this.transform.position;
-
+            Vector3 targetDir = (nbCenter + nbAvoid  ) - this.transform.position;
+ 
             // turning toward target direction
             transform.rotation = Quaternion.Slerp(this.transform.rotation,
                                                    Quaternion.LookRotation(targetDir),
@@ -190,8 +182,6 @@ public class Flock : MonoBehaviour
     }
     void ApplyFlockingRulesNO3()
     {
- 
-
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, 0.25f))
         {
@@ -204,22 +194,32 @@ public class Flock : MonoBehaviour
                                                1);
             Debug.Log("myManager.rotationSpeed * Time.deltaTime : " + myManager.rotationSpeed ); 
         }
+ 
 
-        // if (Physics.Raycast(transform.position, transform.up, out hit, 3))
-        //{
-        //    Debug.DrawLine(transform.position, hit.point, Color.red);
-        //    transform.rotation = Quaternion.Slerp(this.transform.rotation,
-        //                               Quaternion.LookRotation(transform.up * -1),
-        //                               myManager.rotationSpeed * Time.deltaTime);
-        //}
+    }
 
-        // if (Physics.Raycast(transform.position, -1 * transform.up, out hit, 3))
-        //{
-        //    Debug.DrawLine(transform.position, hit.point, Color.red);
-        //    transform.rotation = Quaternion.Slerp(this.transform.rotation,
-        //                               Quaternion.LookRotation(transform.up),
-        //                               myManager.rotationSpeed * Time.deltaTime);
-        //}
+    void ApplyFlockingRulesNO4()
+    {
+        Vector3 directVector = _Target.transform.position - transform.position;
+
+        float degree = Vector3.Angle(directVector, transform.forward);
+
+        if (directVector.magnitude > 1.0f)
+        {
+            // Apply the rotation to the object
+            transform.rotation = Quaternion.LookRotation(directVector.normalized);
+        }
+        //Rotate around the target 
+        else if (degree > 5 || degree < 3) {
+
+            Vector3 targetRotation = Vector3.Cross(directVector.normalized, transform.up);
+
+            // Apply the rotation to the object
+            transform.rotation = Quaternion.LookRotation(-targetRotation.normalized); 
+        }
+
+        //Getting closer to the target 
+
 
     }
 
