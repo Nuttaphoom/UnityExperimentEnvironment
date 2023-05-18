@@ -95,8 +95,8 @@ public class Flock : MonoBehaviour
 
             // turning toward target direction
             transform.rotation = Quaternion.Slerp(this.transform.rotation,
-                                                   Quaternion.LookRotation(targetDir),
-                                                   myManager.rotationSpeed * Time.deltaTime);
+                                                   Quaternion.LookRotation(targetDir.normalized),
+                                                     1);
         }
     }
 
