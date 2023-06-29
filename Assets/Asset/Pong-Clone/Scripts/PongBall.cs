@@ -17,43 +17,45 @@ public class PongBall : MonoBehaviour
             //top 
             if ( resolve % 2 != 0 )
             {
+                //TODO - it collide top
                 velocity.y = -Mathf.Abs(velocity.y);
             }
             resolve = resolve >> 1; 
             //bottom 
             if (resolve % 2 != 0)
             {
+                //TODO - it collide bottom
                 velocity.y = Mathf.Abs(velocity.y);
             }
             resolve = resolve >> 1;
             //left
             if (resolve % 2 != 0)
             {
-
+                //TODO - it collide left
                 velocity.x = Mathf.Abs(velocity.x);
             }
             resolve = resolve >> 1;
             //right 
             if (resolve % 2 != 0)
             {
+                //TODO - it collide right 
                 velocity.x = -Mathf.Abs(velocity.x);
             }
-
         } 
-    
     }
 
     private int isOutOfBound()
     {
         int ret = 0 ; 
-        Camera cam = Camera.main;
-        Vector3 pos;
-        Vector3 viewPos;
+        Camera cam = Camera.main ;
+        Vector3 pos ;
+        Vector3 viewPos ;
+
         //Check Top 
         pos = transform.position; pos.y += gameObject.GetComponent<Renderer>().bounds.size.y / 2;
         viewPos = cam.WorldToViewportPoint(pos);
 
-        if (isViewPosOutOfBound(viewPos))
+        if (isViewPosOutOfBound(viewPos,false ))
         {
             ret += 1;
         }
@@ -62,7 +64,7 @@ public class PongBall : MonoBehaviour
         pos = transform.position; pos.y -= gameObject.GetComponent<Renderer>().bounds.size.y / 2;
         viewPos = cam.WorldToViewportPoint(pos);
         
-        if (isViewPosOutOfBound(viewPos))
+        if (isViewPosOutOfBound(viewPos,false))
         {
             ret += 2;
         }
@@ -71,16 +73,15 @@ public class PongBall : MonoBehaviour
         pos = transform.position; pos.x -= gameObject.GetComponent<Renderer>().bounds.size.x / 2;
         viewPos = cam.WorldToViewportPoint(pos);
 
-        if (isViewPosOutOfBound(viewPos))
+        if (isViewPosOutOfBound(viewPos,true))
         {
             ret += 4;
         }
-
-        //Check Right  
+ 
         pos = transform.position; pos.x += gameObject.GetComponent<Renderer>().bounds.size.x / 2;
         viewPos = cam.WorldToViewportPoint(pos);
 
-        if (isViewPosOutOfBound(viewPos))
+        if (isViewPosOutOfBound(viewPos,true))
         {
 
             ret += 8 ;
@@ -88,9 +89,13 @@ public class PongBall : MonoBehaviour
         return ret;
     }
 
-    private bool isViewPosOutOfBound(Vector3 viewPos)
+    private bool isViewPosOutOfBound(Vector3 viewPos, bool horizontal)
     {
-        return ! (viewPos.x >= 0 && viewPos.x <= 1 && viewPos.y >= 0 && viewPos.y <= 1 && viewPos.z > 0) ;  
+        if (horizontal)
+            return ! (viewPos.x >= 0 && viewPos.x <= 1);
+
+
+        return ! (viewPos.y >= 0 && viewPos.y <= 1 && viewPos.z > 0)  ;
     }
 
 
